@@ -1,0 +1,315 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Medication Dispensing System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-5 mb-4">Medication Dispensing System</h1>
+      <form method="post" action="{{ url_for('dispense') }}">
+        <div id="medications">
+          <div class="form-row align-items-end">
+            <div class="form-group col-md-4">
+              <label for="medication_name_0">Medication Name</label>
+              <input type="text" class="form-control" id="medication_name_0" name="medication_name_0" required>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="dosage_0">Dosage</label>
+              <input type="text" class="form-control" id="dosage_0" name="dosage_0" required>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="quantity_0">Quantity</label>
+              <input type="number" class="form-control" id="quantity_0" name="quantity_0" required>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary mb-3" onclick="addMedication()">Add Another Medication</button>
+        <button type="submit" class="btn btn-primary mb-3">Dispense</button>
+      </form>
+      <div>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-info">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+            <table class="table table-striped mt-4">
+              <thead>
+                <tr>
+                  <th scope="col">Medication Name</th>
+                  <th scope="col">Dosage</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for message in messages %}
+                <tr>
+                  <td>{{ message.split()[0] }}</td>
+                  <td>{{ message.split()[1] }}</td>
+                  <td>{{ message.split()[2] }}</td>
+                  <td>{{ 'Dispensed' if 'successfully' in message else 'Failed' }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% endif %}
+        {% endwith %}
+      </div>
+    </div>
+    <script>
+      let medicationCount = 1;
+      function addMedication() {
+        const medicationsDiv = document.getElementById('medications');
+        const newMedication = `
+          <div class="form-row align-items-end">
+            <div class="form-group col-md-4">
+              <label for="medication_name_${medicationCount}">Medication Name</label>
+              <input type="text" class="form-control" id="medication_name_${medicationCount}" name="medication_name_${medicationCount}" required>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="dosage_${medicationCount}">Dosage</label>
+              <input type="text" class="form-control" id="dosage_${medicationCount}" name="dosage_${medicationCount}" required>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="quantity_${medicationCount}">Quantity</label>
+              <input type="number" class="form-control" id="quantity_${medicationCount}" name="quantity_${medicationCount}" required>
+            </div>
+          </div>`;
+        medicationsDiv.insertAdjacentHTML('beforeend', newMedication);
+        medicationCount++;
+      }
+    </script>
+  </body>
+</html>
+
+
+<!--
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Medication Dispensing System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-5 mb-4">Medication Dispensing System</h1>
+      <form method="post" action="{{ url_for('dispense') }}">
+        <div id="medications">
+          <div class="form-row align-items-end">
+            <div class="form-group col-md-4">
+              <label for="medication_name_0">Medication Name</label>
+              <select class="form-control" id="medication_name_0" name="medication_name_0" required>
+                <option value="" disabled selected>Select medication</option>
+                <option value="Paracetamol">Paracetamol</option>
+                <option value="Ibuprofen">Ibuprofen</option>
+                <option value="Amoxicillin">Amoxicillin</option>
+              </select>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="dosage_0">Dosage</label>
+              <select class="form-control" id="dosage_0" name="dosage_0" required>
+                <option value="" disabled selected>Select dosage</option>
+                <option value="500mg">500mg</option>
+                <option value="250mg">250mg</option>
+                <option value="200mg">200mg</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="quantity_0">Quantity</label>
+              <input type="number" class="form-control" id="quantity_0" name="quantity_0" required>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary mb-3" onclick="addMedication()">Add Another Medication</button>
+        <button type="submit" class="btn btn-primary mb-3">Dispense</button>
+      </form>
+      <div>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-info">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+            <table class="table table-striped mt-4">
+              <thead>
+                <tr>
+                  <th scope="col">Medication Name</th>
+                  <th scope="col">Dosage</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for message in messages %}
+                <tr>
+                  <td>{{ message.split()[0] }}</td>
+                  <td>{{ message.split()[1] }}</td>
+                  <td>{{ message.split()[2] }}</td>
+                  <td>{{ 'Dispensed' if 'successfully' in message else 'Failed' }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% endif %}
+        {% endwith %}
+      </div>
+    </div>
+    <script>
+      let medicationCount = 1;
+      function addMedication() {
+        const medicationsDiv = document.getElementById('medications');
+        const newMedication = `
+          <div class="form-row align-items-end">
+            <div class="form-group col-md-4">
+              <label for="medication_name_${medicationCount}">Medication Name</label>
+              <select class="form-control" id="medication_name_${medicationCount}" name="medication_name_${medicationCount}" required>
+                <option value="" disabled selected>Select medication</option>
+                <option value="Paracetamol">Paracetamol</option>
+                <option value="Ibuprofen">Ibuprofen</option>
+                <option value="Amoxicillin">Amoxicillin</option>
+              </select>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="dosage_${medicationCount}">Dosage</label>
+              <select class="form-control" id="dosage_${medicationCount}" name="dosage_${medicationCount}" required>
+                <option value="" disabled selected>Select dosage</option>
+                <option value="500mg">500mg</option>
+                <option value="250mg">250mg</option>
+                <option value="200mg">200mg</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="quantity_${medicationCount}">Quantity</label>
+              <input type="number" class="form-control" id="quantity_${medicationCount}" name="quantity_${medicationCount}" required>
+            </div>
+          </div>`;
+        medicationsDiv.insertAdjacentHTML('beforeend', newMedication);
+        medicationCount++;
+      }
+    </script>
+  </body>
+</html>
+-->
+
+
+<!--
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Medication Dispensing System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-5 mb-4">Medication Dispensing System</h1>
+      <form method="post" action="{{ url_for('dispense') }}">
+        <div id="medications">
+          <div class="form-row align-items-end">
+            <div class="form-group col-md-4">
+              <label for="medication_name_0">Medication Name</label>
+              <select class="form-control" id="medication_name_0" name="medication_name_0" required>
+                <option value="" disabled selected>Select medication</option>
+                <option value="Paracetamol">Paracetamol</option>
+                <option value="Ibuprofen">Ibuprofen</option>
+                <option value="Amoxicillin">Amoxicillin</option>
+              </select>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="dosage_0">Dosage</label>
+              <select class="form-control" id="dosage_0" name="dosage_0" required>
+                <option value="" disabled selected>Select dosage</option>
+                <option value="500mg">500mg</option>
+                <option value="250mg">250mg</option>
+                <option value="200mg">200mg</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="quantity_0">Quantity</label>
+              <input type="number" class="form-control" id="quantity_0" name="quantity_0" required>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary mb-3" onclick="addMedication()">Add Another Medication</button>
+        <button type="submit" class="btn btn-primary mb-3">Dispense</button>
+      </form>
+      <div>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-info">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+            <table class="table table-striped mt-4">
+              <thead>
+                <tr>
+                  <th scope="col">Medication Name</th>
+                  <th scope="col">Dosage</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Timestamp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for message in messages %}
+                <tr>
+                  <td>{{ message.split()[0] }}</td>
+                  <td>{{ message.split()[1] }}</td>
+                  <td>{{ message.split()[2] }}</td>
+                  <td>{{ 'Dispensed' if 'successfully' in message else 'Failed' }}</td>
+                  <td>{{ message.split()[-1] }} {{ message.split()[-2] }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% endif %}
+        {% endwith %}
+      </div>
+    </div>
+    <script>
+      let medicationCount = 1;
+      function addMedication() {
+        const medicationsDiv = document.getElementById('medications');
+        const newMedication = `
+          <div class="form-row align-items-end">
+            <div class="form-group col-md-4">
+              <label for="medication_name_${medicationCount}">Medication Name</label>
+              <select class="form-control" id="medication_name_${medicationCount}" name="medication_name_${medicationCount}" required>
+                <option value="" disabled selected>Select medication</option>
+                <option value="Paracetamol">Paracetamol</option>
+                <option value="Ibuprofen">Ibuprofen</option>
+                <option value="Amoxicillin">Amoxicillin</option>
+              </select>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="dosage_${medicationCount}">Dosage</label>
+              <select class="form-control" id="dosage_${medicationCount}" name="dosage_${medicationCount}" required>
+                <option value="" disabled selected>Select dosage</option>
+                <option value="500mg">500mg</option>
+                <option value="250mg">250mg</option>
+                <option value="200mg">200mg</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2">
+              <label for="quantity_${medicationCount}">Quantity</label>
+              <input type="number" class="form-control" id="quantity_${medicationCount}" name="quantity_${medicationCount}" required>
+            </div>
+          </div>`;
+        medicationsDiv.insertAdjacentHTML('beforeend', newMedication);
+        medicationCount++;
+      }
+    </script>
+  </body>
+</html>
+-->
